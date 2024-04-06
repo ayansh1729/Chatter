@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "./Chat.css";
 import { Avatar, IconButton } from "@material-ui/core";
 import {
@@ -20,7 +20,14 @@ import { actionTypes } from "../reducer";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import UseWindowDimensions from "../UseWindowDimensions";
 import SendIcon from "@material-ui/icons/Send";
-import { collection, doc, query, orderBy, onSnapshot, addDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  query,
+  orderBy,
+  onSnapshot,
+  addDoc,
+} from "firebase/firestore";
 
 function Chat() {
   const [seed, setSeed] = useState("");
@@ -35,11 +42,16 @@ function Chat() {
   const { width } = UseWindowDimensions();
   const [showSend, setshowSend] = useState(false);
 
+  const messagesEndRef = useRef(null);
+
   useEffect(() => {
     if (roomId) {
-      const unsubscribeRoom = onSnapshot(doc(db, "rooms", roomId), (snapshot) => {
-        setRoomName(snapshot.data().name);
-      });
+      const unsubscribeRoom = onSnapshot(
+        doc(db, "rooms", roomId),
+        (snapshot) => {
+          setRoomName(snapshot.data().name);
+        }
+      );
 
       const unsubscribeMessages = onSnapshot(
         query(
@@ -48,6 +60,7 @@ function Chat() {
         ),
         (snapshot) => {
           setMessages(snapshot.docs.map((doc) => doc.data()));
+          scrollToBottom();
         }
       );
 
@@ -59,30 +72,47 @@ function Chat() {
   }, [roomId]);
 
   useEffect(() => {
+    if (input.length > 0) {
+      setshowSend(true);
+    } else {
+      setshowSend(false);
+    }
+  }, [input]);
+  
+
+  useEffect(() => {
     setSeed(Math.floor(Math.random() * 5000));
   }, [roomId]);
 
- const onEmojiClick = (event, emojiObject) => {
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const onEmojiClick = (event, emojiObject) => {
     setInput((prevInput) => prevInput + event.emoji);
     setEmoji(false);
   };
-  
+
   const sendMessage = async (e) => {
     e.preventDefault();
-  
+
     try {
       const messageRef = collection(db, "rooms", roomId, "messages");
-  
+
       // Fallback value for name if user display name is undefined
       const displayName = user?.displayName || "Anonymous";
-  
+
       await addDoc(messageRef, {
         message: input,
         name: displayName,
         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
         photoURL: localStorage.getItem("photoURL"),
       });
-  
+
       setInput("");
       setEmoji(false);
       setshowSend(false);
@@ -90,16 +120,15 @@ function Chat() {
       console.error("Error adding message: ", error);
     }
   };
-  
-  
+
   const handleDrawerToggle = () => {
     setToggler(!toggler);
     dispatch({
       type: actionTypes.SET_TOGGLER,
       togglerState: togglerState + 1,
     });
-    setshowSend(false);
   };
+
   return (
     <>
       {width < 629 ? (
@@ -138,11 +167,11 @@ function Chat() {
             </div>
           </div>
           <div className="chat_body">
-            {messages.map((message) => (
+            {messages.map((message, index) => (
               <p
+                key={index}
                 className={`chat_message ${
-                  message.name == user?.displayName &&
-                  "chat_receiver"
+                  message.name === user?.displayName && "chat_receiver"
                 }`}
               >
                 <span className="chat_name">{message.name}</span>
@@ -152,13 +181,14 @@ function Chat() {
                 </span>
               </p>
             ))}
+            <div ref={messagesEndRef} />
           </div>
           <div className="chat_footer">
-          <IconButton onClick={() => setEmoji(!Emoji)}>
-            <div className="emoji">
-              <InsertEmoticonIcon />
-            </div>
-          </IconButton>
+            <IconButton onClick={() => setEmoji(!Emoji)}>
+              <div className="emoji">
+                <InsertEmoticonIcon />
+              </div>
+            </IconButton>
             {Emoji && <Picker onEmojiClick={onEmojiClick} />}
             <form>
               <input
@@ -206,11 +236,11 @@ function Chat() {
             </div>
           </div>
           <div className="chat_body">
-            {messages.map((message) => (
+            {messages.map((message, index) => (
               <p
+                key={index}
                 className={`chat_message ${
-                  message.name == user?.displayName &&
-                  "chat_receiver"
+                  message.name === user?.displayName && "chat_receiver"
                 }`}
               >
                 <span className="chat_name">{message.name}</span>
@@ -220,13 +250,14 @@ function Chat() {
                 </span>
               </p>
             ))}
+            <div ref={messagesEndRef} />
           </div>
           <div className="chat_footer">
-          <IconButton onClick={() => setEmoji(!Emoji)}>
-            <div className="emoji">
-              <InsertEmoticonIcon />
-            </div>
-          </IconButton>
+            <IconButton onClick={() => setEmoji(!Emoji)}>
+              <div className="emoji">
+                <InsertEmoticonIcon />
+              </div>
+            </IconButton>
             {Emoji && <Picker onEmojiClick={onEmojiClick} />}
             <form>
               <input

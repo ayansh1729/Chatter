@@ -38,6 +38,7 @@
     background-position: center;
     padding: 30px;
     overflow: scroll;
+    padding-bottom: 35px !important;
 }
 
 .chat_message{

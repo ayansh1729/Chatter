@@ -1,6 +1,5 @@
-
 .login{
-    background-color: #f8f8f8;
+    background-color: #cae2e5;
     height: 100vh;
     width: 100vw;
     display: grid;
@@ -8,11 +7,12 @@
 }
 
 .login_container{
-    padding: 100px;
     text-align: center;
-    background-color: white;
+    background-color: rgb(255, 255, 255);
+    height: 50vh;
+    width: 50vh;
     border-radius: 10px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 3px rgba(0,0,0,0.10);
+    box-shadow: 0 5px 30px rgba(0, 0, 0, 0.498);
 }
 
 .login_container >button{
@@ -30,24 +30,26 @@
         width: 100vw;
         display: flex;
         flex-direction: column;
-        padding:0px 10px !important;
         overflow: scroll;
+        margin: 0;
+        justify-content: space-around;
     }
 
     .login_text{
-        margin-top: 110vw;
+
         background-color: #5381eb;
         border-radius: 20px;
         color: white;
         display: flex;
         justify-content: center;
         width: 50vw;
-        margin-left: 23%;
+        margin-left: 24%;
         font-size: xx-small;
         box-shadow: 0 1px 3px rgba(85, 5, 234, 0.12), 0 1px 3px rgba(57, 3, 250, 0.1);
     }
     .button{
         margin-bottom: 20px !important;
         margin-right: 20px !important;
+        margin-left: 5% !important;
     }
 }
