@@ -4,19 +4,19 @@ import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
 
-  apiKey: "AIzaSyBGqSwWKDVDkPaJ4nflpdBkoPYd2v7TkJk",
+  apiKey: "AIzaSyBhqMIZq6Ta8i3QteTupZ2PtviLGmlEuv4",
 
-  authDomain: "front-end-projects-5b17d.firebaseapp.com",
+  authDomain: "front-end-f93cd.firebaseapp.com",
 
-  projectId: "front-end-projects-5b17d",
+  projectId: "front-end-f93cd",
 
-  storageBucket: "front-end-projects-5b17d.appspot.com",
+  storageBucket: "front-end-f93cd.appspot.com",
 
-  messagingSenderId: "341960427936",
+  messagingSenderId: "251844070548",
 
-  appId: "1:341960427936:web:7b7820e2bf64fa8505bcc5",
+  appId: "1:251844070548:web:ca13e16994085e8097b881",
 
-  measurementId: "G-MQC11JEBRP"
+  measurementId: "G-MCBXBT6K39"
 
 };
 
